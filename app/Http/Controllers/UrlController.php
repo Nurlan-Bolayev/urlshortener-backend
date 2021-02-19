@@ -20,22 +20,22 @@ class UrlController extends Controller
     {
         $attrs = $request->validate([
             'url' => 'required|url'
-        ],[
+        ], [
             'url.url' => 'The url must be in the correct format.',
         ]);
 
-        $body = [
-            'short_url' => Str::random(5),
+        $body = array_merge($attrs, [
             'creator_id' => optional($request->user())->id,
-        ];
+        ]);
 
-        return Url::query()->forceCreate(array_merge($body, $attrs));
-
+        return Url::unguarded(fn() => Url::query()->firstOrCreate($body, [
+            'short_url' => Str::random(5)
+        ]));
     }
 
     public function click(Request $request, Url $url)
     {
-        DB::table('urls')->where('short_url',$url->short_url)->increment('click_count', 1);
+        DB::table('urls')->where('short_url', $url->short_url)->increment('click_count', 1);
         $url->last_click = Carbon::now();
         $url->save();
         AccessLog::query()->forceCreate([
@@ -68,6 +68,4 @@ class UrlController extends Controller
         $url->delete();
         return 'deleted';
     }
-
-
 }
