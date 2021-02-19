@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UrlController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,16 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:api')->get('/users/me', function (Request $request) {
     return $request->user();
 });
 
 Route::post('urls/add-url', UrlController::class . '@create');
-Route::get('urls/{url}', UrlController::class . '@click');
 
 Route::middleware('auth')->group(function () {
 
     Route::get('{url}/statistics', UrlController::class .'@statistics');
     Route::get('/urls', UrlController::class . '@all');
-    Route::delete('urls/{url}', UrlController::class . '@delete');
+    Route::delete('/{url}', UrlController::class . '@delete');
 });

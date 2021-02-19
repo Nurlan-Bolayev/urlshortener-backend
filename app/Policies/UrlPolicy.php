@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Policies;
-
-use App\Models\Url;
 use App\Models\User;
-use Composer\DependencyResolver\Request;
+use App\Models\Url;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
@@ -22,9 +20,9 @@ class UrlPolicy
         //
     }
 
-    public function delete(Request $request, Url $url)
+    public function delete(?User $user, Url $url)
     {
-        return $request->user()->id == $url->creator_id
+        return optional($user)->id === $url->creator_id
             ? Response::allow()
             : Response::deny('You are not allowed to delete this url');
     }

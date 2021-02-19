@@ -19,10 +19,9 @@ class UrlController extends Controller
     public function create(Request $request)
     {
         $attrs = $request->validate([
-            'url' => 'required|url|unique:urls'
+            'url' => 'required|url'
         ],[
             'url.url' => 'The url must be in the correct format.',
-            'url.unique' => 'You have already shortened this url. Please enter another one.'
         ]);
 
         $body = [
@@ -36,7 +35,7 @@ class UrlController extends Controller
 
     public function click(Request $request, Url $url)
     {
-        DB::table('urls')->increment('click_count', 1, ['short_url' => $url->short_url]);
+        DB::table('urls')->where('short_url',$url->short_url)->increment('click_count', 1);
         $url->last_click = Carbon::now();
         $url->save();
         AccessLog::query()->forceCreate([
@@ -67,6 +66,7 @@ class UrlController extends Controller
     {
         $this->authorize('delete', $url);
         $url->delete();
+        return 'deleted';
     }
 
 

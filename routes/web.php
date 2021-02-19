@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UrlController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('api/register', UserController::class .'@register');
-Route::post('api/login', UserController::class .'@login');
+Route::post('login', UserController::class .'@login');
 Route::post('api/logout',UserController::class .'@logout');
 
 Route::get('api/email/verify/notice', UserController::class .'@verificationNotice')->name('verification.notice');
@@ -24,3 +25,5 @@ Route::get('api/email/verify/{id}/{hash}',UserController::class .'@verifyEmail')
 Route::post('api/forgot-password', UserController::class .'@forgotPassword')->middleware('guest')->name('password.email');
 Route::post('api/reset-password',UserController::class .'@resetPassword')->middleware('guest')->name('password.update');
 Route::get('api/reset-password/{token}', UserController::class .'@showResetPasswordForm')->middleware('guest')->name('password.reset');
+
+Route::get('/{url}', UrlController::class . '@click');
