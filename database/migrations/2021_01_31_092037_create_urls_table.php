@@ -20,7 +20,7 @@ class CreateUrlsTable extends Migration
             $table->string('url');
             $table->string('short_url');
             $table->integer('click_count')->default(0);
-            $table->string('last_click')->nullable()->default(null);
+            $table->timestamp('last_click')->nullable();
             $table->timestamps();
         });
     }
