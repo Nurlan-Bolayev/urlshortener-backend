@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('api/register', UserController::class .'@register');
-Route::post('login', UserController::class .'@login');
+Route::post('api/login', UserController::class .'@login');
 Route::post('api/logout',UserController::class .'@logout');
 
 Route::get('api/email/verify/notice', UserController::class .'@verificationNotice')->name('verification.notice');
